@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const axios = require('axios');
+const { response } = require('express');
 
 router.get('/getSports', (req, res) => {
     axios.get('http://142.93.36.1/api/v1/fetch_data?Action=listEventTypes')
@@ -46,6 +47,36 @@ router.get('/getMatches/:eventId/:id', (req, res) => {
             })
         });
 })
+router.get('/getMarkets/:eventId', (req, res) => {
+    axios.get('http://142.93.36.1/api/v1/fetch_data?Action=listMarketTypes&EventID=' + req.params.eventId)
+        .then(response => {
+            return res.status(200).json({
+                success: true,
+                data: response.data
+            })
+        })
+        .catch(error => {
+            return res.status(500).json({
+                success: false,
+                error: error
+            })
+        });
+})
+router.get('/getBookmakerMarket/:eventId', (req, res) => {
+    axios.get('http://46.101.9.108/api/v1/fetch_data?Action=listBookmakerMarket&EventID=' + req.params.eventId)
+        .then(response => {
+            return res.status(200).json({
+                success: true,
+                data: response.data
+            })
+        })
+        .catch(error => {
+            return res.status(500).json({
+                success: false,
+                error: error
+            })
+        });
+})
 router.get('/getRunners/:marketId', (req, res) => {
     axios.get('http://142.93.36.1/api/v1/fetch_data?Action=listMarketRunner&MarketID=' + req.params.marketId)
         .then(response => {
@@ -61,8 +92,8 @@ router.get('/getRunners/:marketId', (req, res) => {
             })
         });
 })
-router.get('/getMarkets/:eventId', (req, res) => {
-    axios.get('http://142.93.36.1/api/v1/fetch_data?Action=listMarketTypes&EventID=' + req.params.eventId)
+router.get('/getBookmakerRunners/:marketId', (req, res) => {
+    axios.get('http://46.101.9.108/api/v1/fetch_data?Action=listBookmakerMarketRunner&MarketID= ' + req.params.marketId)
         .then(response => {
             return res.status(200).json({
                 success: true,
@@ -115,7 +146,7 @@ router.get('/getOdds/:marketId', async (req, res) => {
                 const response = await axios.get('http://142.93.36.1/api/v1/listMarketBookOdds?market_id=' + sliced)
                 result = result.concat(response.data)
             } catch (err) {
-                console.log(err);
+                //console.log(err);
                 return res.status(500).json({
                     success: false,
                     error: err
@@ -125,6 +156,60 @@ router.get('/getOdds/:marketId', async (req, res) => {
         return res.status(200).json({
             success: true,
             data: result
+        })
+    }
+
+})
+router.get('/getOdds/:marketId/:bookmakerId', async (req, res) => {
+
+    try {
+        const marketIds = req.params.marketId
+        const allMarketIds = marketIds.split(",")
+        allMarketIds.splice(allMarketIds.length, 1)
+        const noOfMarkets = allMarketIds.length
+
+        if (noOfMarkets <= 29) {
+
+            const response1 = await axios.get('http://142.93.36.1/api/v1/listMarketBookOdds?market_id=' + req.params.marketId)
+            const response2 = await axios.get('http://46.101.9.108/api/v1/listBookmakerMarketOdds?market_id=' + req.params.bookmakerId)
+
+            return res.status(200).json({
+                success: true,
+                data: [
+                    ...response1.data,
+                    ...response2.data
+                ]
+            })
+
+        }
+        else {
+
+            let result = []
+
+            for (let i = 0; i <= noOfMarkets; i = i + 29) {
+
+                let sliced
+                if (!Math.floor((allMarketIds.length - i) / 29)) {
+                    sliced = allMarketIds.slice(i, allMarketIds.length).toString()
+                } else {
+                    sliced = allMarketIds.slice(i, i + 29).toString()
+                }
+
+                const response = await axios.get('http://142.93.36.1/api/v1/listMarketBookOdds?market_id=' + sliced)
+                result = result.concat(response.data)
+
+            }
+            return res.status(200).json({
+                success: true,
+                data: result
+            })
+        }
+
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            success: false,
+            error: err
         })
     }
 
