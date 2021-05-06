@@ -29,6 +29,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use('/api', Router);
+app.get('/',(req,res)=>{
+
+    res.status(200).json({
+        success: true,
+        data: 'welcome'
+    })
+})
 
 PORT= process.env.PORT||4000;
 app.listen(PORT,()=>{
