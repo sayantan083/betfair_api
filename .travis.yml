@@ -1,0 +1,13 @@
+sudo: required
+language: generic
+
+services:
+  - docker
+
+after_success:
+  - docker build -t sayantan083/nodeapp ./
+
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push sayantan083/nodeapp
