@@ -13,7 +13,7 @@ before_install:
   - gcloud components update kubectl
   - gcloud auth activate-service-account --key-file service-account.json
   - gcloud config set project odds-318914 
-  - gcloud config set compute/zone asia-south1-b
+  - gcloud config set compute/zone asia-south2-a
   - gcloud container clusters get-credentials odd-cluster
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
