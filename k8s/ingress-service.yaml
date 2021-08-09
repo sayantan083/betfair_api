@@ -10,11 +10,11 @@ metadata:
 spec:
   tls:
     - hosts:
-        - sydneyexch.com
-        - www.sydneyexch.com
-      secretName: sydneyexch-com
+        - speedfantsy.com
+        - www.speedfantsy.com
+      secretName: speedfantsy-com
   rules:
-    - host: sydneyexch.com
+    - host: speedfantsy.com
       http:
         paths:
           - path: /?(.*)
@@ -24,7 +24,7 @@ spec:
                 name: server-cluster-ip-service
                 port:
                   number: 4000
-    - host: www.sydneyexch.com
+    - host: www.speedfantsy.com
       http:
         paths:
           - path: /?(.*)

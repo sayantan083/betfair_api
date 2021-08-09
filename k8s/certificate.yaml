@@ -1,13 +1,13 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: sydneyexch-com-tls
+  name: speedfantsy-com-tls
 spec:
-  secretName: sydneyexch-com
+  secretName: speedfantsy-com
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
-  commonName: sydneyexch.com
+  commonName: speedfantsy.com
   dnsNames:
-    - sydneyexch.com
-    - www.sydneyexch.com
+    - speedfantsy.com
+    - www.speedfantsy.com
