@@ -1,39 +1,3 @@
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: ingress-service
-#   annotations:
-#     kubernetes.io/ingress.class: "nginx"
-#     nginx.ingress.kubernetes.io/use-regex: "true"
-#     cert-manager.io/cluster-issuer: "letsencrypt-prod"
-#     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-# spec:
-#   tls:
-#     - hosts:
-#         - speedfantsy.com
-#         - www.speedfantsy.com
-#       secretName: speedfantsy-com
-#   rules:
-#     - host: speedfantsy.com
-#       http:
-#         paths:
-#           - path: /?(.*)
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: server-cluster-ip-service
-#                 port:
-#                   number: 4000
-#     - host: www.speedfantsy.com
-#       http:
-#         paths:
-#           - path: /?(.*)
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: server-cluster-ip-service
-#                 port:
-#                   number: 4000
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -41,16 +5,27 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/use-regex: "true"
-    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
-  # tls:
-  #   - hosts:
-  #       - speedfantsy.com
-  #       - www.speedfantsy.com
-  #     secretName: speedfantsy-com
+  tls:
+    - hosts:
+        - sydneyexch.com
+        - www.sydneyexch.com
+      secretName: sydneyexch-com
   rules:
-    - http:
+    - host: sydneyexch.com
+      http:
+        paths:
+          - path: /?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: server-cluster-ip-service
+                port:
+                  number: 4000
+    - host: www.sydneyexch.com
+      http:
         paths:
           - path: /?(.*)
             pathType: Prefix
